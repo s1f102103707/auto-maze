@@ -21,7 +21,7 @@ const Home = () => {
     [0, -1], // 左
     [0, 1], // 右
   ];
-
+  const [human, setHuman] = useState();
   const onClick = (x: number, y: number) => {
     const newMaze = JSON.parse(JSON.stringify(initialMaze)); // リセットした迷路を作成
 
