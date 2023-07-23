@@ -74,7 +74,7 @@ const Home = () => {
       <button className={styles.generate} onClick={() => onClick()}>
         生成
       </button>
-      <button className={styles.search} onClick={() => onClick()}>
+      <button className={styles.search} onClick={() => onClickSearch()}>
         探索
       </button>
       <div className={styles.board} style={{ backgroundColor: '#000' }}>
