@@ -26,11 +26,13 @@ const Home = () => {
   const [maze, setMaze] = useState(blankMaze);
   const directions = [
     [-1, 0], // 上
+    [0, 1], // 右
     [1, 0], // 下
     [0, -1], // 左
-    [0, 1], // 右
   ];
+
   const [human, setHuman] = useState();
+
   const onClick = () => {
     const newMaze = JSON.parse(JSON.stringify(initialMaze));
     newMaze.map((row: number[], y: number) => {
@@ -47,18 +49,34 @@ const Home = () => {
             newY < newMaze.length &&
             newMaze[newY][newX] === 0
           ) {
-            newMaze[newY][newX] = 1;
+            newMaze[newY][newX] = 2;
           }
         }
       });
     });
     setMaze(newMaze);
+    newMaze.map((row: number[], y: number) => {
+      row.map((color: number, x: number) => {
+        if (color === 2) {
+          newMaze[y][x] = 1;
+        }
+      });
+    });
+    setMaze(newMaze);
+  };
+  const onClickSearch = () => {
+    //壁が左になかった、
+    // const { x: number, y: number, front } = human;
+    // const [dx, dy] = front;
   };
   return (
     <div className={styles.container}>
-      <div className={styles.generate} onClick={() => onClick()}>
+      <button className={styles.generate} onClick={() => onClick()}>
         生成
-      </div>
+      </button>
+      <button className={styles.search} onClick={() => onClick()}>
+        探索
+      </button>
       <div className={styles.board} style={{ backgroundColor: '#000' }}>
         {maze.map((row, y) => (
           <div key={y} className={styles.row}>
