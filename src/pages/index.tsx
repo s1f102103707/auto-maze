@@ -31,43 +31,57 @@ const Home = () => {
     [0, -1], // 左
   ];
 
-  const [human, setHuman] = useState();
+  const [human, setHuman] = useState({
+    x: 0,
+    y: 0,
+    forward: [1, 0],
+  });
 
   const onClick = () => {
     const newMaze = JSON.parse(JSON.stringify(initialMaze));
-    newMaze.map((row: number[], y: number) => {
-      row.map((color: number, x: number) => {
-        if (color === 1) {
+    // newMaze.map((row: number[], y: number) => {
+    //   row.map((color: number, x: number) => {
+    for (let x = 0; x < maze.length; x++) {
+      for (let y = 0; y < maze[x].length; y++) {
+        if (newMaze[y][x] === 1) {
           const randomDirectionIndex = Math.floor(Math.random() * directions.length);
           const [dx, dy] = directions[randomDirectionIndex];
           const newX = x + dx;
           const newY = y + dy;
-          if (
-            newX >= 0 &&
-            newX < newMaze[0].length &&
-            newY >= 0 &&
-            newY < newMaze.length &&
-            newMaze[newY][newX] === 0
-          ) {
-            newMaze[newY][newX] = 2;
-          }
+          newMaze[newY][newX] = 2;
         }
-      });
-    });
+      }
+    }
     setMaze(newMaze);
-    newMaze.map((row: number[], y: number) => {
+    const updatedMaze = JSON.parse(JSON.stringify(newMaze));
+    updatedMaze.map((row: number[], y: number) => {
       row.map((color: number, x: number) => {
         if (color === 2) {
-          newMaze[y][x] = 1;
+          updatedMaze[y][x] = 1;
         }
       });
     });
-    setMaze(newMaze);
+    setMaze(updatedMaze);
+    console.log('map');
+    console.table(updatedMaze);
   };
   const onClickSearch = () => {
-    //壁が左になかった、
-    // const { x: number, y: number, front } = human;
-    // const [dx, dy] = front;
+    const { x, y, forward } = human;
+    const [dx, dy] = forward;
+    const newX = x + dx;
+    const newY = y + dy;
+    let Forward = [0, 0];
+    if (dx === 1) {
+      Forward = [dy, dx];
+    } else if (dy === -1) {
+      Forward = [-dy, dx];
+    } else if (dx === -1) {
+      Forward = [dy, dx];
+    } else {
+      Forward = [-dy, dx];
+    }
+    setHuman({ x: newX, y: newY, forward: Forward });
+    console.log(human);
   };
   return (
     <div className={styles.container}>
