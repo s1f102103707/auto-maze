@@ -39,10 +39,10 @@ const Home = () => {
 
   const onClick = () => {
     const newMaze = JSON.parse(JSON.stringify(initialMaze));
-    // newMaze.map((row: number[], y: number) => {
-    //   row.map((color: number, x: number) => {
-    for (let x = 0; x < maze.length; x++) {
-      for (let y = 0; y < maze[x].length; y++) {
+    console.log('initialmap');
+    console.table(newMaze);
+    newMaze.map((row: number[], y: number) => {
+      row.map((color: number, x: number) => {
         if (newMaze[y][x] === 1) {
           const randomDirectionIndex = Math.floor(Math.random() * directions.length);
           const [dx, dy] = directions[randomDirectionIndex];
@@ -50,9 +50,11 @@ const Home = () => {
           const newY = y + dy;
           newMaze[newY][newX] = 2;
         }
-      }
-    }
+      });
+    });
     setMaze(newMaze);
+    console.log('secoundmap');
+    console.table(newMaze);
     const updatedMaze = JSON.parse(JSON.stringify(newMaze));
     updatedMaze.map((row: number[], y: number) => {
       row.map((color: number, x: number) => {
