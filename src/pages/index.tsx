@@ -45,7 +45,7 @@ const Home = () => {
       row.map((color: number, x: number) => {
         if (newMaze[y][x] === 1) {
           const randomDirectionIndex = Math.floor(Math.random() * directions.length);
-          const [dx, dy] = directions[randomDirectionIndex];
+          const [dy, dx] = directions[randomDirectionIndex];
           const newX = x + dx;
           const newY = y + dy;
           newMaze[newY][newX] = 2;
@@ -67,23 +67,106 @@ const Home = () => {
     console.log('map');
     console.table(updatedMaze);
   };
+
+  const Leftmove = () => {
+    const { x, y, forward } = human;
+    const [dx, dy] = forward;
+    let newX = x;
+    let newY = y;
+    let Forward: number[] = forward;
+    if (dx === 1) {
+      Forward = [dy, dx];
+    } else if (dy === 1) {
+      Forward = [-dy, dx];
+    } else if (dx === -1) {
+      Forward = [dy, dx];
+    } else if (dy === -1) {
+      Forward = [-dy, dx];
+    }
+    setHuman({ x: newX, y: newY, forward: Forward });
+
+    newX = x + Forward[0];
+    newY = y + Forward[1];
+    setHuman({ x: newX, y: newY, forward: Forward });
+    console.log(human);
+  };
   const onClickSearch = () => {
+    MoveHuman();
+    console.log(human);
+  };
+  const gomove = () => {
     const { x, y, forward } = human;
     const [dx, dy] = forward;
     const newX = x + dx;
     const newY = y + dy;
-    let Forward = [0, 0];
+    setHuman({ ...human, x: newX, y: newY });
+  };
+  const Rightmove = () => {
+    const { forward } = human;
+    const [dx, dy] = forward;
+
+    let Forward: number[] = forward;
+    if (dx === 1) {
+      Forward = [dy, -dx];
+    } else if (dy === -1) {
+      Forward = [dy, dx];
+    } else if (dx === -1) {
+      Forward = [dy, -dx];
+    } else if (dy === 1) {
+      Forward = [dy, dx];
+    }
+    setHuman({ ...human, forward: Forward });
+  };
+  const MoveHuman = () => {
+    const { x, y, forward } = human;
+    if (x === maze.length - 1 && y === maze[0].length - 1) {
+      alert('goal');
+      return;
+    }
+    const [dx, dy] = forward;
+    let newX = x;
+    let newY = y;
+    let Forward: number[] = forward;
+    const goX = x + forward[0];
+    const goY = y + forward[1];
     if (dx === 1) {
       Forward = [dy, dx];
-    } else if (dy === -1) {
+    } else if (dy === 1) {
       Forward = [-dy, dx];
     } else if (dx === -1) {
       Forward = [dy, dx];
-    } else {
+    } else if (dy === -1) {
       Forward = [-dy, dx];
     }
-    setHuman({ x: newX, y: newY, forward: Forward });
-    console.log(human);
+    newX = x + Forward[0];
+    newY = y + Forward[1];
+    if (
+      newX >= 0 &&
+      newX < maze.length &&
+      newY >= 0 &&
+      newY < maze[0].length &&
+      maze[newX][newY] === 0 &&
+      maze[newX][newY] !== undefined
+    ) {
+      Leftmove();
+      console.log('leftside');
+      console.log(newY, newX);
+    } else if (
+      goX >= 0 &&
+      // goX !== undefined &&
+      // goY !== undefined &&
+      goX < maze.length &&
+      goY >= 0 &&
+      goY < maze[0].length &&
+      maze[goX][goY] === 0 &&
+      maze[goX][goY] !== undefined
+    ) {
+      gomove();
+      console.log('goside');
+    } else {
+      Rightmove();
+      console.log('rightside');
+    }
   };
   return (
     <div className={styles.container}>
@@ -94,17 +177,20 @@ const Home = () => {
         探索
       </button>
       <div className={styles.board} style={{ backgroundColor: '#000' }}>
-        {maze.map((row, y) => (
-          <div key={y} className={styles.row}>
-            {row.map((color, x) => (
-              <div
-                key={`${y}-${x}`}
-                className={styles.cell}
-                style={{ backgroundColor: color === 0 ? '#fff' : '#000' }}
-              />
-            ))}
-          </div>
-        ))}
+        {maze.map((row, x) =>
+          row.map((color, y) => (
+            <div
+              key={`${x}-${y}`}
+              className={styles.cell}
+              style={{ backgroundColor: color === 0 ? '#fff' : '#000' }}
+            >
+              {human.x === x && human.y === y && (
+                <div className={styles.position} key={`${human.x}- ${human.y}`} />
+              )}{' '}
+              {`${y}-${x}`}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

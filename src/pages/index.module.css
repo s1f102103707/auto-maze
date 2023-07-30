@@ -1,32 +1,27 @@
 .container {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
   min-height: 100vh;
   padding: 0 0.5rem;
+  flex-direction: column;
 }
 
 .board {
   width: 720px;
   height: 720px;
   background-color: grey;
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  grid-template-rows: repeat(9, 1fr);
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .cell {
-  position: relative;
+  display: flex;
   width: 80px;
   height: 80px;
   border: 1px solid black;
   margin: 0;
-}
-
-.row {
-  position: relative;
 }
 
 .generate {
@@ -43,4 +38,10 @@
   margin: 10px 0;
   margin-right: 20px;
   font-size: 50px;
+}
+
+.position {
+  background-color: aqua;
+  width: 100%;
+  height: 100%;
 }
